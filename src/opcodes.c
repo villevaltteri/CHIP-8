@@ -347,3 +347,21 @@ opcode_Fx29(chip8_t *chip)
 {
     
 }
+
+void
+opcode_Fx33(chip8_t *chip)
+{
+
+}
+
+void
+opcode_Fx55(chip8_t *chip)
+{
+
+}
+
+void
+opcode_Fx65(chip8_t *chip)
+{
+    
+}
