@@ -260,4 +260,40 @@ opcode_Dxyn(chip8_t *chip);
 void
 opcode_Ex00(chip8_t *chip);
 
+void 
+opcode_Ex9E(chip8_t *chip);
+
+void
+opcode_ExA1(chip8_t *chip);
+
+void
+opcode_Fx00(chip8_t *chip);
+
+void 
+opcode_Fx07(chip8_t *chip);
+
+void
+opcode_Fx0A(chip8_t *chip);
+
+void
+opcode_Fx15(chip8_t *chip);
+
+void
+opcode_Fx18(chip8_t *chip);
+
+void
+opcode_Fx1E(chip8_t *chip);
+
+void
+opcode_Fx29(chip8_t *chip);
+
+void 
+opcode_Fx33(chip8_t *chip);
+
+void
+opcode_Fx55(chip8_t *chip);
+
+void 
+opcode_Fx65(chip8_t *chip);
+
 #endif
