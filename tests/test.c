@@ -304,7 +304,28 @@ test_chip8_opcode_8xy4()
 {
     chip8_t chip;
     chip8_reset(&chip);
-    
+
+    uint8_t register_0_value = 0x23;
+    uint8_t register_1_value = 0x12;
+    uint8_t sum_1 = register_0_value + register_1_value;
+
+    chip.v[0] = register_0_value;
+    chip.v[1] = register_1_value;
+    chip.opcode = 0x8014;
+    opcode_8xy0(&chip);
+    assert(chip.v[0] == sum_1);
+    assert(chip.v[0xf] == 0);
+
+    register_0_value = 0x99;
+    register_1_value = 0x77;
+    uint16_t sum_2 = register_0_value + register_1_value;
+    chip.v[0] = register_0_value;
+    chip.v[1] = register_1_value;
+    opcode_8xy0(&chip);
+    assert(chip.v[0] == (sum_2 & 0xFF));
+    assert(chip.v[0xf] == 1);
+
+    printf("Test passed: Opcode 8xy4\n");
 }
 
 int
@@ -320,4 +341,9 @@ main()
     test_chip8_opcode_5xy0();
     test_chip8_opcode_6xkk();
     test_chip8_opcode_7xkk();
+    test_chip8_opcode_8xy0();
+    test_chip8_opcode_8xy1();
+    test_chip8_opcode_8xy2();
+    test_chip8_opcode_8xy3();
+    test_chip8_opcode_8xy4();
 }
