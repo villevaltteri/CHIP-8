@@ -200,10 +200,64 @@ opcode_8xy7(chip8_t *chip);
 void
 opcode_8xyE(chip8_t *chip);
 
+/**
+ * Skip next instruction if Vx != Vy. If values are not
+ * equal, the PC is incresed by 2.
+ * 
+ * @param chip Address of chip8_t object
+ * @return void
+*/
 void
 opcode_9xy0(chip8_t *chip);
 
+/**
+ * Set I = nnn. The value of register I is set to nnn
+ * 
+ * @param chip Address of chip8_t object
+ * @return void
+*/
 void
 opcode_Annn(chip8_t *chip);
+
+/**
+ * Jump to location nnn + V0. PC is set to
+ * nnn plus the value of V0.
+ * 
+ * @param chip Address of chip8_t object
+ * @return void
+*/
+void
+opcode_Bnnn(chip8_t *chip);
+
+/**
+ * Set Vx = random byte AND kk. Generate random number
+ * between 0 and 255, then ANDed with the value kk. The 
+ * result is then stored in Vx
+ * 
+ * @param chip Address of chip8_t object
+ * @return void
+*/
+void
+opcode_Cxkk(chip8_t *chip);
+
+/**
+ * Display n-byte sprite starting at memory location
+ * I at (Vx, Vy), set Vf = collision.
+ * 
+ * @param chip Address of chip8_t object
+ * @return void
+*/
+void 
+opcode_Dxyn(chip8_t *chip);
+
+/**
+ * Helper function to determine which of E starting opcode
+ * should be called (Ex9E or ExA1)
+ * 
+ * @param chip Address of chip8_t object
+ * @return void
+*/
+void
+opcode_Ex00(chip8_t *chip);
 
 #endif
