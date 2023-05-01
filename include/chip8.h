@@ -21,8 +21,8 @@ typedef struct
     uint8_t sound_timer;            // sound timer
     uint16_t stack[STACK_SIZE];     // 16-level stack
     uint8_t sp;                     // stack pointer
-    uint16_t keypad[KEYPAD_SIZE];   // 16-key keypad
-    uint8_t display[DISPLAY_SIZE];  // 64x32 display
+    uint8_t keypad[KEYPAD_SIZE];   // 16-key keypad
+    uint32_t display[DISPLAY_SIZE];  // 64x32 display
     uint16_t opcode;                // current opcode 
 }chip8_t;
 
@@ -56,4 +56,7 @@ chip8_load_state(chip8_t *chip, const char *filename);
 */
 void
 chip8_reset(chip8_t *chip);
+
+void
+chip8_load_rom(chip8_t *chip, const char *filename);
 #endif

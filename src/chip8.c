@@ -55,3 +55,23 @@ chip8_load_state(chip8_t *chip, const char *filename)
     fclose(file);
 }
 
+void
+chip8_load_rom(chip8_t *chip, const char *filename)
+{
+    FILE *file = fopen(filename, "rb");
+    if(file == NULL){
+        fprintf(stderr, "[ERROR] Could not open file %s\n", filename);
+        exit(1);
+    }
+    size_t size_of_rom;
+    fseek(file, 0, SEEK_END);
+    size_of_rom = ftell(file);
+    rewind(file);
+
+    size_t size_read = fread(chip->memory + 0x200, size_of_rom, 1, file);
+    if(size_of_rom != size_read){
+        fprintf(stderr, "[ERROR] Failed to read entire file %s\n", filename);
+        exit(1);
+    }
+    fclose(file);
+}
