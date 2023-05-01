@@ -14,7 +14,15 @@ opcode_func_t opcode_table[] = {
     opcode_4xkk,
     opcode_5xy0,
     opcode_6xkk,
-    opcode_7xkk
+    opcode_7xkk,
+    opcode_8xy0,
+    opcode_9xy0,
+    opcode_Annn,
+    opcode_Bnnn,
+    opcode_Cxkk,
+    opcode_Dxyn,
+    opcode_Ex00,
+    opcode_Fx00
 };
 
 
@@ -224,18 +232,19 @@ opcode_Dxyn(chip8_t *chip)
     uint8_t n = chip->opcode & 0x000F;
 
     chip->v[0xF] = 0;
-    for(int i = 0; i < n; i++){
-        uint8_t row = chip->memory[chip->i + i];
-        for(int j = 0; j < 8; j++){
-            uint8_t pixel = (row >> (7 - j)) & 0x1;
-            uint32_t screen_x = (x + j) % DISPLAY_WIDHT;
-            uint32_t screen_y = (y + i) % DISPLAY_HEIGHT;
-            uint32_t index = screen_y * DISPLAY_WIDHT + screen_x;
-            uint32_t old_pixel = chip->display[index];
+    uint8_t xPos = chip->v[x] % DISPLAY_WIDHT;
+    uint8_t yPos = chip->v[y] % DISPLAY_HEIGHT;
 
-            chip->display[index] ^= pixel;
-            if(old_pixel && !chip->display[index]){
-                chip->v[0xF] = 1;
+    for(unsigned row = 0; row < n; row++){
+        uint8_t pixel = chip->memory[chip->i + row];
+        for(unsigned col = 0; col < 8; col++){
+            uint8_t spritePixel = pixel & (0x80 >> col);
+            uint32_t *screenPixel = &chip->display[(yPos + row) * DISPLAY_WIDHT + (xPos + col)];
+            if(spritePixel){
+                if(*screenPixel == 0xFFFFFFFF){
+                    chip->v[0xf] = 1;
+                }
+                *screenPixel ^= 0xFFFFFFFF;
             }
         }
     }
@@ -262,7 +271,7 @@ void
 opcode_Ex9E(chip8_t *chip)
 {
     uint8_t key = chip->v[(chip->opcode & 0x0F00) >> 8];
-    if(chip->keypad[key] == 1){
+    if(chip->keypad[key]){
         chip->pc += 2;
     }
 }
@@ -271,7 +280,7 @@ void
 opcode_ExA1(chip8_t *chip)
 {
     uint8_t key = chip->v[(chip->opcode & 0x0F00) >> 8];
-    if(chip->keypad[key] != 1){
+    if(!chip->keypad[key]){
         chip->pc += 2;
     }
 }
@@ -321,7 +330,17 @@ opcode_Fx07(chip8_t *chip)
 void
 opcode_Fx0A(chip8_t *chip)
 {
+    int keyPress = 0;
 
+    for(int i = 0; i < KEYPAD_SIZE; i++){
+        if(chip->keypad[i] != 0){
+            chip->v[(chip->opcode & 0x0F00) >> 8] = i;
+            keyPress = 1;
+        } 
+    }
+    if(!keyPress){
+        chip->pc -= 2;
+    }
 }
 
 void
@@ -345,23 +364,40 @@ opcode_Fx1E(chip8_t *chip)
 void
 opcode_Fx29(chip8_t *chip)
 {
-    
+    uint8_t vx = (chip->opcode & 0x0F00) >> 8;
+    uint8_t digit = chip->v[vx];
+    chip->i = 0x50 + (5 *digit);
 }
 
 void
 opcode_Fx33(chip8_t *chip)
 {
+    uint8_t value = chip->v[(chip->opcode & 0x0F00) >> 8];
+
+    chip->memory[chip->i + 2] = value % 10;
+    value /= 10;
+
+    chip->memory[chip->i + 1] = value % 10;
+    value /= 10;
+
+    chip->memory[chip->i] = value % 10;
 
 }
 
 void
 opcode_Fx55(chip8_t *chip)
 {
-
+    uint8_t vx = (chip->opcode & 0x0F00) >> 8;
+    for(uint8_t i = 0; i <= vx; i++){
+        chip->memory[chip->i + i] = chip->v[i];
+    }
 }
 
 void
 opcode_Fx65(chip8_t *chip)
 {
-    
+    uint8_t vx = (chip->opcode & 0x0F00) >> 8;
+    for(uint8_t i = 0; i <= vx; i++){
+        chip->v[i] = chip->memory[chip->i + i];
+    }
 }
