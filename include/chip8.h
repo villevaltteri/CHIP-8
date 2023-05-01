@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 
+#define FONTSET_SIZE 80
 #define MEMORY_SIZE 4096
 #define REGISTERS 16
 #define STACK_SIZE 16
@@ -59,4 +60,10 @@ chip8_reset(chip8_t *chip);
 
 void
 chip8_load_rom(chip8_t *chip, const char *filename);
+
+void 
+load_font_set(chip8_t *chip);
+
+void 
+chip8_cycle(chip8_t *chip);
 #endif
