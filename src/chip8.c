@@ -97,7 +97,7 @@ chip8_load_rom(chip8_t *chip, const char *filename)
     size_of_rom = ftell(file);
     rewind(file);
 
-    size_t size_read = fread(chip->memory + 0x200, size_of_rom, 1, file);
+    size_t size_read = fread(chip->memory + 0x200, 1, size_of_rom, file);
     if(size_of_rom != size_read){
         fprintf(stderr, "[ERROR] Failed to read entire file %s\n", filename);
         exit(1);
