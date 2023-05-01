@@ -41,9 +41,9 @@ chip8_parse_args(int argc, char *argv[])
     }
    if(game_name != NULL){
 
-        game_name = chip8_determine_game_name(game_name);
+        buffer = chip8_determine_game_name(game_name);
     }
-    return game_name;
+    return buffer;
 }
 
 char *
