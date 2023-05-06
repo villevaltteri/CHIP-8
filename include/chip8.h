@@ -23,8 +23,10 @@ typedef struct
     uint16_t stack[STACK_SIZE];     // 16-level stack
     uint8_t sp;                     // stack pointer
     uint8_t keypad[KEYPAD_SIZE];   // 16-key keypad
-    uint32_t display[DISPLAY_SIZE];  // 64x32 display
-    uint16_t opcode;                // current opcode 
+    uint8_t display[DISPLAY_SIZE];  // 64x32 display
+    uint16_t opcode;                // current opcode
+    long tick_1;
+    long tick_2;
 }chip8_t;
 
 /**
