@@ -51,7 +51,7 @@ chip8_determine_game_name(char *filename)
 {
     char *buffer = NULL;
     char *suffix = ".ch8";
-    char *prefix = "../ROMs/";
+    char *prefix = "./ROMs/";
     size_t prefix_len = strlen(prefix);
     size_t str_len = strlen(filename);
     size_t suffix_len = strlen(suffix);
