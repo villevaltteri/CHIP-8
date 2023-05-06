@@ -46,7 +46,6 @@ chip8_reset(chip8_t *chip)
     chip->sound_timer = 0;
     chip->tick_1 = 0;
     chip->tick_2 = 0;
-    chip->refresh_screen = 0;
 
     memset(chip->stack, 0, STACK_SIZE * sizeof(unsigned short));
     chip->sp = 0;
