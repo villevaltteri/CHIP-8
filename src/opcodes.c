@@ -227,24 +227,22 @@ opcode_Cxkk(chip8_t *chip)
 void
 opcode_Dxyn(chip8_t *chip)
 {
-    uint8_t x = chip->v[(chip->opcode & 0x0F00) >> 8];
-    uint8_t y = chip->v[(chip->opcode & 0x00F0) >> 4];
-    uint8_t n = chip->opcode & 0x000F;
-
+    unsigned short x = chip->v[(chip->opcode & 0x0F00) >> 8];
+    unsigned short y = chip->v[(chip->opcode & 0x00F0) >> 4];
+    unsigned short height = chip->opcode & 0x000F;
+    unsigned short pixel;
     chip->v[0xF] = 0;
-    uint8_t xPos = chip->v[x] % DISPLAY_WIDHT;
-    uint8_t yPos = chip->v[y] % DISPLAY_HEIGHT;
+    int screenx = 64;
+    int screeny = 32;
 
-    for(unsigned row = 0; row < n; row++){
-        uint8_t pixel = chip->memory[chip->i + row];
-        for(unsigned col = 0; col < 8; col++){
-            uint8_t spritePixel = pixel & (0x80 >> col);
-            uint32_t *screenPixel = &chip->display[(yPos + row) * DISPLAY_WIDHT + (xPos + col)];
-            if(spritePixel){
-                if(*screenPixel == 0xFFFFFFFF){
-                    chip->v[0xf] = 1;
+    for (int yline = 0; yline < height; yline++){
+        pixel = chip->memory[chip->i + yline];
+        for (int xline = 0; xline < 8; xline++){
+            if ((pixel & (0x80 >> xline)) != 0){
+                if (chip->display[(x + xline + ((y + yline) * screenx))] == 1){
+                    chip->v[0xF] = 1;                                    
                 }
-                *screenPixel ^= 0xFFFFFFFF;
+                chip->display[x + xline + ((y + yline) * screenx)] ^= 1;
             }
         }
     }
