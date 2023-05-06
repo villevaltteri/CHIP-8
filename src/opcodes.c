@@ -233,7 +233,6 @@ opcode_Dxyn(chip8_t *chip)
     unsigned short pixel;
     chip->v[0xF] = 0;
     int screenx = 64;
-    int screeny = 32;
 
     for (int yline = 0; yline < height; yline++){
         pixel = chip->memory[chip->i + yline];
